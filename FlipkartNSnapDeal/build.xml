@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name = "FlipkartNSnapDeal" basedir="." default="execute">
+	<property name="src.dir" value="src"/>
+	<property name="build.dir" value="build"/>
+	<property name="jar.dir" value="jar"/>
+	<property name="zip.dir" value="zip"/>
+	<property name="lib.dir" value="lib"/>
+	<property name="main-class" value="finalPack.Products"/>
+	
+	
+	<path id = "classpath">
+		<fileset dir = "${lib.dir}" includes="*.jar"/>
+	</path>
+	
+	<!-- Deletes the existing build, docs and dist directory-->
+
+		<target name="clean" description="Use this option to clean directories">
+			<delete dir="${build.dir}"/>
+			<delete dir="${dist.dir}"/>
+			<delete dir="${web.dir}"/>
+			<delete dir="${jar.dir}"/>
+			<delete dir="${zip.dir}"/>
+		</target>
+	
+	<!-- Creates the directory and build file-->
+		
+		<target name="makedir" description="Use this option to make directories in system" depends="clean">
+			<mkdir dir="${build.dir}"/>
+			<mkdir dir="${jar.dir}"/>
+			<mkdir dir="${zip.dir}"/>
+			
+		</target>
+	
+	<!-- Compiles the java code-->
+		
+		<target name="compile" depends="makedir" description="Use this option to compile code">
+			<javac srcdir="${src.dir}"
+	         destdir="${build.dir}"
+			includeantruntime="false" classpathref="classpath">
+			
+	         </javac>
+		</target>
+
+	
+	<!-- Creates jar file-->
+		
+		<target name="jar" depends="compile" description="Use this option to create jar file">
+			<jar destfile="${jar.dir}/myjar.jar" basedir="${build.dir}">
+				<manifest>
+					<attribute name="Main-Class" value="${main-class}"/>
+				</manifest>
+			</jar>
+		</target>
+	
+	<!-- Executes the java code-->
+		
+		<target name="execute" description="Use this option to execute the code" depends="jar">
+			<java fork="true" classname="${main-class}">
+				<classpath>
+					<path refid="classpath"/>
+					<path location="${jar.dir}/myjar.jar"/>
+				</classpath>
+			</java>
+		</target>
+	
+</project>
